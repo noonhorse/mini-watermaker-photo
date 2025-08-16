@@ -1,0 +1,142 @@
+<!--pages/settings/settings.wxml-->
+<view class="settings-container">
+  
+  <!-- 设置内容 -->
+  <scroll-view class="settings-content" scroll-y="true">
+    
+    <!-- Logo设置 -->
+    <view class="setting-group">
+      <view class="section-header">Logo设置</view>
+      
+      <view class="setting-item">
+        <view class="item-label">Logo图片</view>
+        <view class="item-content">
+          <view class="logo-preview" bindtap="selectLogo">
+            <image wx:if="{{settings.logo}}" class="logo-image" src="{{settings.logo}}" mode="aspectFit"></image>
+            <view wx:else class="logo-placeholder">点击选择Logo</view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="setting-item">
+        <view class="item-label">Logo文字</view>
+        <view class="item-content">
+          <input class="text-input" value="{{settings.logoText}}" placeholder="请输入Logo文字" bindinput="onLogoTextChange" />
+        </view>
+      </view>
+    </view>
+    
+    <!-- 水印文字设置 -->
+    <view class="setting-group">
+      <view class="section-header">水印文字</view>
+      
+      <view class="setting-item">
+        <view class="item-label">描述文字</view>
+        <view class="item-content">
+          <input class="text-input" value="{{settings.description}}" placeholder="请输入描述文字" bindinput="onDescriptionChange" />
+        </view>
+      </view>
+    </view>
+    
+    <!-- 显示设置 -->
+    <view class="setting-group">
+      <view class="section-header">显示设置</view>
+      
+      <view class="setting-item">
+        <view class="item-label">显示地址</view>
+        <view class="item-content">
+          <switch checked="{{settings.showLocation}}" bindchange="onShowLocationChange" color="#007aff" />
+        </view>
+      </view>
+      
+      <view class="setting-item">
+        <view class="item-label">显示坐标</view>
+        <view class="item-content">
+          <switch checked="{{settings.showCoordinates}}" bindchange="onShowCoordinatesChange" color="#007aff" />
+        </view>
+      </view>
+    </view>
+    
+    <!-- 相机设置 -->
+    <view class="setting-group">
+      <view class="section-header">相机设置</view>
+      
+      <view class="setting-item">
+        <view class="item-label">闪光灯模式</view>
+        <view class="item-content">
+          <picker bindchange="onFlashModeChange" value="{{flashModeIndex}}" range="{{flashModes}}" range-key="name">
+            <view class="picker-display">{{flashModes[flashModeIndex].name}}</view>
+          </picker>
+        </view>
+      </view>
+      
+      <view class="setting-item">
+        <view class="item-label">定时器</view>
+        <view class="item-content">
+          <picker bindchange="onTimerChange" value="{{timerIndex}}" range="{{timerOptions}}" range-key="name">
+            <view class="picker-display">{{timerOptions[timerIndex].name}}</view>
+          </picker>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 语言设置 -->
+    <view class="setting-group">
+      <view class="section-header">语言设置</view>
+      
+      <view class="setting-item">
+        <view class="item-label">界面语言</view>
+        <view class="item-content">
+          <picker bindchange="onLanguageChange" value="{{languageIndex}}" range="{{languages}}" range-key="name">
+            <view class="picker-display">{{languages[languageIndex].name}}</view>
+          </picker>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 其他设置 -->
+    <view class="setting-group">
+      <view class="section-header">其他</view>
+      
+      <view class="setting-item" bindtap="clearCache">
+        <view class="item-label">清除缓存</view>
+        <view class="item-content">
+          <view class="action-text">点击清除</view>
+        </view>
+      </view>
+      
+      <view class="setting-item" bindtap="resetSettings">
+        <view class="item-label">恢复默认设置</view>
+        <view class="item-content">
+          <view class="action-text">点击恢复</view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 关于 -->
+    <view class="setting-group">
+      <view class="section-header">关于</view>
+      
+      <view class="setting-item">
+        <view class="item-label">版本号</view>
+        <view class="item-content">
+          <view class="version-text">v1.0.0</view>
+        </view>
+      </view>
+      
+      <view class="setting-item" bindtap="showAbout">
+        <view class="item-label">关于应用</view>
+        <view class="item-content">
+          <view class="action-text">查看详情</view>
+        </view>
+      </view>
+    </view>
+    
+  </scroll-view>
+  
+  <!-- 底部按钮 -->
+  <view class="settings-footer">
+    <button class="save-btn" bindtap="saveSettings">保存设置</button>
+    <button class="back-btn" bindtap="goBack">返回相机</button>
+  </view>
+</view>

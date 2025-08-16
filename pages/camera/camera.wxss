@@ -1,0 +1,581 @@
+/* pages/camera/camera.wxss */
+.camera-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+.camera-preview {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
+}
+
+/* 横屏模式 */
+.camera-preview.landscape-left {
+  transform: rotate(90deg);
+}
+
+.camera-preview.landscape-right {
+  transform: rotate(-90deg);
+}
+
+.camera-preview.portrait-upside-down {
+  transform: rotate(180deg);
+}
+
+/* 水印叠加层 */
+.watermark-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/* 顶部控制栏 */
+.top-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+  padding-top: calc(60rpx + env(safe-area-inset-top));
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+  padding-bottom: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+/* 左上角设置按钮 */
+.watermark-top-left {
+  position: absolute;
+  top: calc(106rpx + env(safe-area-inset-top));
+  left: 40rpx;
+  pointer-events: auto;
+}
+
+.setting-btn {
+  width: 64rpx;
+  height: 64rpx;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.icon-setting {
+  font-size: 36rpx;
+}
+
+/* 左下角信息区域 */
+.watermark-bottom-left {
+  position: absolute;
+  bottom: 200rpx;
+  left: 40rpx;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 30rpx;
+  border-radius: 15rpx;
+  backdrop-filter: blur(10rpx);
+  max-width: 500rpx;
+}
+
+.description-text {
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+.datetime-text {
+  color: #fff;
+  font-size: 28rpx;
+  margin-bottom: 8rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+.location-text {
+  color: #fff;
+  font-size: 24rpx;
+  margin-bottom: 6rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+.coordinates-text {
+  color: #ccc;
+  font-size: 20rpx;
+  font-family: monospace;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+/* 倒计时叠加层 */
+.timer-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-count {
+  width: 200rpx;
+  height: 200rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80rpx;
+  font-weight: bold;
+  color: #007aff;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* 底部控制栏 */
+.bottom-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 40rpx 30rpx;
+  padding-bottom: calc(10rpx + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 100;
+}
+
+.control-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120rpx;
+  height: 120rpx;
+  /* background: rgba(255, 255, 255, 0.2);
+  border-radius: 20rpx;
+  backdrop-filter: blur(10rpx);
+  border: 2rpx solid rgba(255, 255, 255, 0.3); */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.control-btn:active {
+  transform: scale(0.9);
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-icon {
+  font-size: 36rpx;
+  margin-bottom: 8rpx;
+}
+
+.btn-text {
+  color: #fff;
+  font-size: 20rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+/* 拍照按钮容器 */
+.capture-button-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30rpx 0;
+}
+
+/* 权限提示tooltip */
+.permission-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 20rpx;
+  z-index: 1000;
+  animation: tooltipFadeIn 0.3s ease-out;
+}
+
+.tooltip-content {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20rpx 30rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  white-space: nowrap;
+  backdrop-filter: blur(10rpx);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.3);
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12rpx solid transparent;
+  border-right: 12rpx solid transparent;
+  border-top: 12rpx solid rgba(0, 0, 0, 0.8);
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* 拍照按钮 */
+.shutter-btn {
+  width: 120rpx;
+  height: 120rpx;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 5lrpx solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.3);
+  touch-action: manipulation;
+}
+
+/* 权限授权文字 */
+.permission-text {
+  color: white;
+  font-size: 24rpx;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
+}
+
+@media (max-width: 375px) {
+  .shutter-btn {
+    width: 100rpx;
+    height: 100rpx;
+  }
+  .permission-text {
+    font-size: 22rpx;
+  }
+}
+
+@media (min-width: 414px) {
+  .shutter-btn {
+    width: 160rpx;
+    height: 160rpx;
+  }
+  .permission-text {
+    font-size: 26rpx;
+  }
+}
+
+.shutter-btn:active {
+  transform: scale(0.9);
+}
+
+.shutter-btn.capturing {
+  background: #ff3b30;
+  animation: capture 0.3s ease-out;
+}
+
+/* 拍照按钮动画增强 */
+.shutter-btn.capturing {
+  animation: captureFlash 0.3s ease-out;
+}
+
+@keyframes captureFlash {
+  0% { background: #fff; transform: scale(1); }
+  50% { background: #007aff; transform: scale(1.1); }
+  100% { background: #fff; transform: scale(1); }
+}
+
+@keyframes capture {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.8); }
+  100% { transform: scale(1); }
+}
+
+.shutter-inner {
+  width: 100rpx;
+  height: 100rpx;
+  background: #fff;
+  border-radius: 50%;
+  border: 4rpx solid transparent;
+}
+
+/* 功能控制区域 */
+.function-controls {
+  position: absolute;
+  right: 40rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.function-btn {
+  width: 64rpx;
+  height: 64rpx;
+  /* background: rgba(0, 0, 0, 0.5); */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10rpx);
+  border: 2rpx solid rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.function-btn:active {
+  transform: scale(0.9);
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.function-icon {
+  font-size: 32rpx;
+}
+
+.timer-badge {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  background: #ff3b30;
+  color: #fff;
+  font-size: 18rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 10rpx;
+  min-width: 30rpx;
+  text-align: center;
+}
+
+/* 缩放控制 */
+.zoom-control {
+  position: absolute;
+  right: 20rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 25rpx;
+  padding: 15rpx 10rpx;
+  min-width: 80rpx;
+  backdrop-filter: blur(15rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(100rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.zoom-info {
+  color: white;
+  font-size: 24rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  text-align: center;
+}
+
+.zoom-slider {
+  width: 200rpx;
+  height: 30rpx;
+  margin: 10rpx 0;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.zoom-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  margin-top: 10rpx;
+}
+
+.zoom-btn {
+  width: 50rpx;
+  height: 50rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  padding: 0;
+  line-height: 1;
+}
+
+.zoom-btn:active {
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(0.95);
+}
+
+/* 加载叠加层 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(5rpx);
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 60rpx;
+  border-radius: 20rpx;
+  backdrop-filter: blur(10rpx);
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.loading-spinner {
+  width: 80rpx;
+  height: 80rpx;
+  border: 6rpx solid rgba(255, 255, 255, 0.2);
+  border-top: 6rpx solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 30rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 弹跳动画 */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10rpx); }
+  60% { transform: translateY(-5rpx); }
+}
+
+/* 错误提示样式 */
+.error-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.error-content {
+  background: rgba(255, 59, 48, 0.9);
+  padding: 60rpx;
+  border-radius: 20rpx;
+  text-align: center;
+  max-width: 600rpx;
+  margin: 0 40rpx;
+  animation: bounce 0.5s ease-out;
+}
+
+.error-icon {
+  font-size: 80rpx;
+  color: #fff;
+  margin-bottom: 20rpx;
+}
+
+.error-title {
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.error-message {
+  color: #fff;
+  font-size: 28rpx;
+  line-height: 1.5;
+  margin-bottom: 40rpx;
+}
+
+.error-button {
+  background: #fff;
+  color: #ff3b30;
+  padding: 20rpx 40rpx;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.error-button:active {
+  background: rgba(255, 255, 255, 0.8);
+}

@@ -1,0 +1,132 @@
+<!--pages/camera/camera.wxml-->
+<view class="camera-container" bindtap="onPageTap">
+  <!-- 相机预览区域 -->
+  <camera 
+    class="camera-preview {{orientation}}"
+    device-position="{{cameraPosition}}"
+    flash="{{flashMode}}"
+    zoom="{{zoomLevel}}"
+    binderror="onCameraError"
+    bindstop="onCameraStop"
+    bindready="onCameraReady"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd"
+  >
+    <!-- 水印叠加层 -->
+    <cover-view class="watermark-overlay">
+      <!-- 左上角设置按钮 -->
+      <cover-view class="watermark-top-left">
+        <cover-view class="setting-btn" bindtap="goToSettings">
+          <image class="icon-setting" src="/static/setting.png" mode="aspectFit"></image>
+        </cover-view>
+        <!-- 闪光灯按钮 -->
+        <view class="function-btn" bindtap="toggleFlash">
+          <image class="function-icon" src="{{flashMode === 'on' ? '/static/flashlight.png' : flashMode === 'off' ? '/static/flashlight-turned-off.png' : '/static/flashlight-auto.png'}}" mode="aspectFit"></image>
+        </view>
+      </cover-view>
+      
+      <!-- 左下角信息区域 -->
+      <cover-view class="watermark-bottom-left">
+        <cover-view class="description-text">{{settings.description}}</cover-view>
+        <cover-view class="datetime-text">{{currentDateTime}}</cover-view>
+        <cover-view wx:if="{{settings.showLocation && locationInfo.address}}" class="location-text">
+          <image class="location-icon" src="/static/dingwei.png" mode="aspectFit"></image>
+          <text class="location-text-content">{{locationInfo.address}}</text>
+        </cover-view>
+        <cover-view wx:if="{{settings.showCoordinates && locationInfo.latitude}}" class="coordinates-text">
+          {{locationInfo.latitude}}, {{locationInfo.longitude}}
+        </cover-view>
+      </cover-view>
+      
+      <!-- 倒计时显示 -->
+      <cover-view wx:if="{{timerCount > 0}}" class="timer-overlay">
+        <cover-view class="timer-count">{{timerCount}}</cover-view>
+      </cover-view>
+    </cover-view>
+  </camera>
+  
+  <!-- 底部控制栏 -->
+  <view class="bottom-controls">
+    <!-- 分享按钮 -->
+    <view class="control-btn" bindtap="sharePhoto">
+      <image class="btn-icon" src="/static/i-share.png" mode="aspectFit"></image>
+      <view class="btn-text">分享</view>
+    </view>
+    
+    <!-- 拍照按钮 -->
+    <view class="capture-button-container">
+      <!-- 权限提示tooltip -->
+      <view class="permission-tooltip" wx:if="{{showPermissionTooltip}}">
+        <view class="tooltip-content">
+          请授权摄像头和位置信息，之后使用水印拍照功能
+        </view>
+        <view class="tooltip-arrow"></view>
+      </view>
+      
+      <view class="shutter-btn {{isCapturing ? 'capturing' : ''}}" bindtap="takePhoto" catchtap="takePhoto">
+         <view class="shutter-inner" wx:if="{{hasPermissions}}"></view>
+         <view class="permission-text" wx:else>点击授权</view>
+       </view>
+    </view>
+    
+    <!-- 切换摄像头按钮 -->
+    <view class="control-btn" bindtap="switchCamera">
+      <image class="btn-icon" src="/static/switch_camera.png" mode="aspectFit"></image>
+      <view class="btn-text">切换</view>
+    </view>
+  </view>
+  
+  <!-- 功能按钮区域 -->
+  <view class="function-controls">
+    
+    
+    <!-- 定时器按钮 -->
+    <!-- <view class="function-btn" bindtap="toggleTimer">
+      <view class="function-icon">⏰</view>
+      <view wx:if="{{settings.timerSeconds > 0}}" class="timer-badge">{{settings.timerSeconds}}s</view>
+    </view> -->
+    
+    <!-- 缩放控制 -->
+    <!-- <view class="zoom-control">
+      <view class="zoom-info">{{zoomLevel.toFixed(1)}}x</view>
+      <slider 
+        class="zoom-slider"
+        min="{{minZoom}}"
+        max="{{maxZoom}}"
+        step="0.1"
+        value="{{zoomLevel}}"
+        bindchange="onZoomChange"
+      />
+      <view class="zoom-buttons">
+        <button class="zoom-btn" bindtap="zoomOut">-</button>
+        <button class="zoom-btn" bindtap="zoomIn">+</button>
+      </view>
+    </view> -->
+  </view>
+</view>
+
+<!-- 加载提示 -->
+<view wx:if="{{isLoading}}" class="loading-overlay">
+  <view class="loading-content">
+    <view class="loading-spinner"></view>
+    <view class="loading-text">{{loadingText}}</view>
+  </view>
+</view>
+
+<!-- 错误对话框 -->
+<view class="error-overlay" wx:if="{{showError}}">
+  <view class="error-content">
+    <view class="error-icon">⚠️</view>
+    <view class="error-title">{{errorTitle}}</view>
+    <view class="error-message">{{errorMessage}}</view>
+    <button class="error-button" bindtap="hideErrorDialog">确定</button>
+  </view>
+</view>
+
+<!-- 隐藏的canvas用于水印处理 -->
+<canvas 
+  id="watermarkCanvas" 
+  type="2d" 
+  style="position: fixed; top: -9999px; left: -9999px; width: 1px; height: 1px;"
+></canvas>

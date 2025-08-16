@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/camera/camera",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#000000",
+    "navigationBarTitleText": "水印打卡相机",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#000000"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于显示地址水印"
+    },
+    "scope.camera": {
+      "desc": "需要使用相机进行拍照"
+    }
+  },
+  "requiredBackgroundModes": ["location"],
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
