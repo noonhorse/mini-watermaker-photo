@@ -7,6 +7,33 @@
   overflow: hidden;
 }
 
+/* 毛玻璃背景图 */
+.background-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.blur-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  background: rgba(0, 0, 0, 0.3);
+}
+
 .camera-preview {
   width: 100%;
   height: 100%;
@@ -15,6 +42,15 @@
   left: 0;
   transition: transform 0.3s ease;
 }
+
+/* 修复真机模式下摄像头内容倒置问题 */
+/* .camera-preview.portrait {
+  transform: scaleY(-1);
+}
+
+.camera-preview.landscape {
+  transform: scaleY(-1) scaleX(-1);
+} */
 
 /* 横屏模式 */
 .camera-preview.landscape-left {
@@ -60,8 +96,11 @@
 .watermark-top-left {
   position: absolute;
   top: calc(106rpx + env(safe-area-inset-top));
-  left: 40rpx;
+  left: 30rpx;
   pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
 }
 
 .setting-btn {
@@ -77,14 +116,38 @@
 }
 
 .icon-setting {
-  font-size: 36rpx;
+  width: 36rpx;
+  height: 36rpx;
+}
+
+/* 闪光灯按钮样式 */
+.flash-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0rpx;
+  min-width: 80rpx;
+}
+
+.flash-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-bottom: 8rpx;
+}
+
+.flash-text {
+  color: #fff;
+  font-size: 20rpx;
+  text-align: center;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
 }
 
 /* 左下角信息区域 */
 .watermark-bottom-left {
   position: absolute;
   bottom: 200rpx;
-  left: 40rpx;
+  left: 30rpx;
   background: rgba(0, 0, 0, 0.5);
   padding: 30rpx;
   border-radius: 15rpx;
@@ -111,6 +174,20 @@
   color: #fff;
   font-size: 24rpx;
   margin-bottom: 6rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+}
+
+.location-icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 8rpx;
+}
+
+.location-text-content {
+  color: #fff;
+  font-size: 24rpx;
   text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
 }
 
@@ -193,8 +270,9 @@
 }
 
 .btn-icon {
-  font-size: 36rpx;
-  margin-bottom: 8rpx;
+  width: 48rpx;
+  height: 48rpx;
+  margin-bottom: 6rpx;
 }
 
 .btn-text {
@@ -259,21 +337,20 @@
 
 /* 拍照按钮 */
 .shutter-btn {
-  width: 120rpx;
-  height: 120rpx;
-  background: #fff;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 5lrpx solid rgba(255, 255, 255, 0.8);
+  border: 4rpx solid #fff;
   box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.3);
   touch-action: manipulation;
 }
 
 /* 权限授权文字 */
 .permission-text {
-  color: white;
+  color: rgb(12, 135, 236);
   font-size: 24rpx;
   font-weight: 500;
   text-align: center;
@@ -327,8 +404,8 @@
 }
 
 .shutter-inner {
-  width: 100rpx;
-  height: 100rpx;
+  width: 86rpx;
+  height: 86rpx;
   background: #fff;
   border-radius: 50%;
   border: 4rpx solid transparent;
@@ -364,7 +441,8 @@
 }
 
 .function-icon {
-  font-size: 32rpx;
+  width: 32rpx;
+  height: 32rpx;
 }
 
 .timer-badge {

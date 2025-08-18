@@ -148,7 +148,7 @@ function addWatermarkElements(ctx, width, height, watermarkData) {
   }
   
   if (showAddress && location && location.address) {
-    watermarkLines.push({ text: `📍 ${location.address}`, font: '16px Arial', color: '#ffffff' })
+    watermarkLines.push({ text: `${location.address}`, font: '16px Arial', color: '#ffffff' })
   }
   
   if (showCoordinates && location && location.latitude && location.longitude) {

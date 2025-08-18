@@ -1,7 +1,13 @@
 <!--pages/camera/camera.wxml-->
 <view class="camera-container" bindtap="onPageTap">
+  <!-- 毛玻璃背景图（权限未授权或摄像头错误时显示） -->
+  <view wx:if="{{!hasPermissions || showError}}" class="background-blur">
+    <image class="background-image" src="/static/bg.jpg" mode="aspectFill"></image>
+    <view class="blur-overlay"></view>
+  </view>
+  
   <!-- 相机预览区域 -->
-  <camera 
+  <camera wx:if="{{hasPermissions}}" 
     class="camera-preview {{orientation}}"
     device-position="{{cameraPosition}}"
     flash="{{flashMode}}"
@@ -21,9 +27,10 @@
           <image class="icon-setting" src="/static/setting.png" mode="aspectFit"></image>
         </cover-view>
         <!-- 闪光灯按钮 -->
-        <view class="function-btn" bindtap="toggleFlash">
-          <image class="function-icon" src="{{flashMode === 'on' ? '/static/flashlight.png' : flashMode === 'off' ? '/static/flashlight-turned-off.png' : '/static/flashlight-auto.png'}}" mode="aspectFit"></image>
-        </view>
+        <cover-view class="flash-btn" bindtap="toggleFlash">
+          <image class="flash-icon" src="{{flashMode === 'on' ? '/static/flashlight.png' : flashMode === 'off' ? '/static/flashlight-turned-off.png' : '/static/flashlight-auto.png'}}" mode="aspectFit"></image>
+          <text class="flash-text">灯光</text>
+        </cover-view>
       </cover-view>
       
       <!-- 左下角信息区域 -->
@@ -48,10 +55,10 @@
   
   <!-- 底部控制栏 -->
   <view class="bottom-controls">
-    <!-- 分享按钮 -->
-    <view class="control-btn" bindtap="sharePhoto">
-      <image class="btn-icon" src="/static/i-share.png" mode="aspectFit"></image>
-      <view class="btn-text">分享</view>
+    <!-- 水印设置按钮 -->
+    <view class="control-btn" bindtap="openWatermarkSettings">
+      <image class="btn-icon" src="/static/shuiyin.png" mode="aspectFit"></image>
+      <view class="btn-text">水印</view>
     </view>
     
     <!-- 拍照按钮 -->
@@ -83,7 +90,7 @@
     
     <!-- 定时器按钮 -->
     <!-- <view class="function-btn" bindtap="toggleTimer">
-      <view class="function-icon">⏰</view>
+      <image class="function-icon" src="/static/dingshirenwu.png" mode="aspectFit"></image>
       <view wx:if="{{settings.timerSeconds > 0}}" class="timer-badge">{{settings.timerSeconds}}s</view>
     </view> -->
     
@@ -115,14 +122,14 @@
 </view>
 
 <!-- 错误对话框 -->
-<view class="error-overlay" wx:if="{{showError}}">
+<!-- <view class="error-overlay" wx:if="{{showError}}">
   <view class="error-content">
     <view class="error-icon">⚠️</view>
     <view class="error-title">{{errorTitle}}</view>
     <view class="error-message">{{errorMessage}}</view>
     <button class="error-button" bindtap="hideErrorDialog">确定</button>
   </view>
-</view>
+</view> -->
 
 <!-- 隐藏的canvas用于水印处理 -->
 <canvas 

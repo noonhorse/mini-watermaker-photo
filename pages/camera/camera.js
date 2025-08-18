@@ -7,7 +7,7 @@ const shareUtil = require('../../utils/share.js')
 Page({
   data: {
     cameraPosition: 'back', // 摄像头位置：back/front
-    flashMode: 'auto', // 闪光灯模式：auto/on/off
+    flashMode: 'off', // 闪光灯模式：off/on/auto（默认关闭）
     zoomLevel: 1, // 缩放级别
     minZoom: 1, // 最小缩放
     maxZoom: 3, // 最大缩放
@@ -440,7 +440,8 @@ Page({
       type: 'light'
     })
     
-    const modes = ['auto', 'on', 'off']
+    // 切换顺序：关闭 -> 开启 -> 自动 -> 关闭
+    const modes = ['off', 'on', 'auto']
     const currentIndex = modes.indexOf(this.data.flashMode)
     const nextIndex = (currentIndex + 1) % modes.length
     const newFlash = modes[nextIndex]
@@ -450,9 +451,9 @@ Page({
     })
     
     const flashTexts = {
-      'auto': '闪光灯自动',
+      'off': '闪光灯关闭',
       'on': '闪光灯开启',
-      'off': '闪光灯关闭'
+      'auto': '闪光灯自动'
     }
     
     wx.showToast({
@@ -495,15 +496,34 @@ Page({
     }
   },
 
-  // 分享照片
-  sharePhoto() {
-    shareUtil.showShareMenu(this.data.lastPhotoPath, (result) => {
-      if (result.success && result.type) {
-        // 记录分享统计
-        shareUtil.recordShareStats(result.type, {
-          timestamp: Date.now(),
-          location: this.data.locationInfo,
-          settings: this.data.settings
+  // 打开水印设置
+  openWatermarkSettings() {
+    const watermarkFormats = ['标准格式', '简洁格式', '详细格式']
+    const currentFormat = this.data.settings.watermarkFormat || '标准格式'
+    const currentIndex = watermarkFormats.indexOf(currentFormat)
+    
+    wx.showActionSheet({
+      itemList: watermarkFormats,
+      success: (res) => {
+        const selectedFormat = watermarkFormats[res.tapIndex]
+        
+        // 更新设置
+        const newSettings = {
+          ...this.data.settings,
+          watermarkFormat: selectedFormat
+        }
+        
+        this.setData({
+          settings: newSettings
+        })
+        
+        // 保存到全局设置
+        app.updateSettings(newSettings)
+        
+        wx.showToast({
+          title: `已切换到${selectedFormat}`,
+          icon: 'success',
+          duration: 1500
         })
       }
     })
@@ -519,10 +539,13 @@ Page({
   // 相机错误处理
   onCameraError(e) {
     console.error('相机错误', e)
-    wx.showToast({
-      title: '相机启动失败',
-      icon: 'none'
+    this.setData({
+      showError: true
     })
+    // wx.showToast({
+    //   title: '相机启动失败',
+    //   icon: 'none'
+    // })
   },
 
   // 相机停止
