@@ -36,7 +36,7 @@
 
 .camera-preview {
   width: 100%;
-  height: 100%;
+  height: 80vh;
   position: absolute;
   top: 0;
   left: 0;
@@ -68,9 +68,9 @@
 /* 水印叠加层 */
 .watermark-overlay {
   width: 100%;
-  height: 100%;
+  height: 80vh;
   position: absolute;
-  top: 0;
+  top: auto;
   left: 0;
   pointer-events: none;
 }
@@ -92,12 +92,17 @@
   z-index: 100;
 }
 
-/* 左上角设置按钮 */
-.watermark-top-left {
+/* 功能区域容器 */
+.function-area {
   position: absolute;
   top: calc(106rpx + env(safe-area-inset-top));
   left: 30rpx;
   pointer-events: auto;
+  z-index: 100;
+}
+
+/* 左上角设置按钮 */
+.watermark-top-left {
   display: flex;
   flex-direction: column;
   gap: 30rpx;
@@ -126,8 +131,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20rpx 0rpx;
-  min-width: 80rpx;
+  min-width: 60rpx;
 }
 
 .flash-icon {
@@ -146,7 +150,7 @@
 /* 左下角信息区域 */
 .watermark-bottom-left {
   position: absolute;
-  bottom: 200rpx;
+  bottom: 120rpx;
   left: 30rpx;
   background: rgba(0, 0, 0, 0.5);
   padding: 30rpx;
@@ -244,6 +248,22 @@
   z-index: 100;
 }
 
+/* 新的底部控制栏 (20%高度) */
+.bottom-controls-new {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20vh;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 60rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 100;
+}
+
 .control-btn {
   display: flex;
   flex-direction: column;
@@ -279,6 +299,72 @@
   color: #fff;
   font-size: 20rpx;
   text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+
+/* 新的控制按钮样式 */
+.control-btn-new {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120rpx;
+  height: 120rpx;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.control-btn-new:active {
+  transform: scale(0.9);
+}
+
+.btn-icon-new {
+  width: 48rpx;
+  height: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.btn-text-new {
+  color: #fff;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+/* 新的拍照按钮样式 */
+.shutter-btn-new {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4rpx solid #fff;
+  background: rgba(255, 255, 255, 0.1);
+  touch-action: manipulation;
+  transition: all 0.3s ease;
+}
+
+.shutter-btn-new:active {
+  /* 调整颜色*/
+}
+
+.shutter-btn-new.capturing {
+  background: #ff3b30;
+  animation: captureFlash 0.3s ease-out;
+}
+
+.shutter-inner-new {
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 50%;
+  margin: 8rpx;
+  background: #fff;
+}
+
+.permission-text-new {
+  color: rgb(12, 135, 236);
+  font-size: 24rpx;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
 }
 
 /* 拍照按钮容器 */

@@ -8,6 +8,7 @@ Page({
   data: {
     cameraPosition: 'back', // 摄像头位置：back/front
     flashMode: 'off', // 闪光灯模式：off/on/auto（默认关闭）
+    mediaType: 'image', // 媒体类型：image/video（默认图片）
     zoomLevel: 1, // 缩放级别
     minZoom: 1, // 最小缩放
     maxZoom: 3, // 最大缩放
@@ -397,19 +398,65 @@ Page({
           title: '保存成功',
           icon: 'success'
         })
-      },
-      fail: (err) => {
-        console.error('保存失败', err)
-        wx.showToast({
-          title: '保存失败',
-          icon: 'none'
-        })
-      },
-      complete: () => {
         this.setData({ 
           isCapturing: false,
           isLoading: false
         })
+      },
+      fail: (err) => {
+        console.error('保存失败', err)
+        
+        // 检查是否是权限问题
+        if (err.errMsg && err.errMsg.includes('auth')) {
+          // 请求相册写入权限
+          wx.authorize({
+            scope: 'scope.writePhotosAlbum',
+            success: () => {
+              // 权限获取成功，重新保存
+              this.savePhoto(imagePath)
+            },
+            fail: () => {
+              // 权限被拒绝，引导用户手动开启
+              wx.showModal({
+                title: '需要相册权限',
+                content: '保存照片需要访问您的相册，请在设置中开启相册权限',
+                confirmText: '去设置',
+                cancelText: '取消',
+                success: (res) => {
+                  if (res.confirm) {
+                    wx.openSetting({
+                      success: (settingRes) => {
+                        if (settingRes.authSetting['scope.writePhotosAlbum']) {
+                          // 用户开启了权限，重新保存
+                          this.savePhoto(imagePath)
+                        } else {
+                          this.setData({ 
+                            isCapturing: false,
+                            isLoading: false
+                          })
+                        }
+                      }
+                    })
+                  } else {
+                    this.setData({ 
+                      isCapturing: false,
+                      isLoading: false
+                    })
+                  }
+                }
+              })
+            }
+          })
+        } else {
+          wx.showToast({
+            title: '保存失败',
+            icon: 'none'
+          })
+          this.setData({ 
+            isCapturing: false,
+            isLoading: false
+          })
+        }
       }
     })
   },
@@ -417,17 +464,51 @@ Page({
   // 切换摄像头
   switchCamera() {
     // 轻微触觉反馈
-    wx.vibrateShort({
-      type: 'light'
-    })
+    // wx.vibrateShort({
+    //   type: 'light'
+    // })
     
     const newPosition = this.data.cameraPosition === 'back' ? 'front' : 'back'
     this.setData({
       cameraPosition: newPosition
     })
+    // 不提示了，画面有展示
+    // wx.showToast({
+    //   title: newPosition === 'back' ? '后置摄像头' : '前置摄像头',
+    //   icon: 'none',
+    //   duration: 1000
+    // })
+  },
+
+  // 切换图片/视频模式
+  toggleVideo() {
+    // 轻微触觉反馈
+    // wx.vibrateShort({
+    //   type: 'light'
+    // })
+    
+    const newMediaType = this.data.mediaType === 'image' ? 'video' : 'image'
+    this.setData({
+      mediaType: newMediaType
+    })
+    
+    // 调用wx.previewMedia方法
+    wx.previewMedia({
+      sources: [{
+        url: '', // 这里可以根据需要设置预览的媒体URL
+        type: newMediaType
+      }],
+      current: 0,
+      success: () => {
+        console.log('预览媒体成功')
+      },
+      fail: (err) => {
+        console.error('预览媒体失败', err)
+      }
+    })
     
     wx.showToast({
-      title: newPosition === 'back' ? '后置摄像头' : '前置摄像头',
+      title: newMediaType === 'image' ? '图片模式' : '视频模式',
       icon: 'none',
       duration: 1000
     })
@@ -610,8 +691,9 @@ Page({
        
        if (Math.abs(x) > Math.abs(y)) {
          orientation = x > 0 ? 'landscape-left' : 'landscape-right'
-       } else {
-         orientation = y > 0 ? 'portrait' : 'portrait-upside-down'
+       // 不需要倒置摄像头内容
+      //  } else {
+      //    orientation = y > 0 ? 'portrait' : 'portrait-upside-down'
        }
        
        if (this.data.orientation !== orientation) {

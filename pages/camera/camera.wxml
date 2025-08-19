@@ -1,5 +1,26 @@
 <!--pages/camera/camera.wxml-->
 <view class="camera-container" bindtap="onPageTap">
+  <!-- 左上角设置按钮 -->
+  <view class="function-area">
+      <view class="watermark-top-left">
+        <view class="setting-btn" bindtap="goToSettings">
+          <image class="icon-setting" src="/static/setting.png" mode="aspectFit"></image>
+        </view>
+        <!-- 闪光灯按钮 -->
+        <view class="flash-btn" bindtap="toggleFlash">
+          <image wx:if="{{flashMode === 'on'}}" class="flash-icon" src="/static/flashlight.png" mode="aspectFit"></image>
+          <image wx:elif="{{flashMode === 'off'}}" class="flash-icon" src="/static/flashlight-turned-off.png" mode="aspectFit"></image>
+          <image wx:else class="flash-icon" src="/static/flashlight-auto.png" mode="aspectFit"></image>
+          <text class="flash-text">灯光</text>
+        </view>
+        <!-- 视频/图片切换 按钮 先屏蔽-->
+        <!-- <view class="flash-btn" bindtap="toggleVideo">
+          <image wx:if="{{mediaType !== 'image'}}" class="flash-icon" src="/static/pic-pictures.png" mode="aspectFit"></image>
+          <image wx:else class="flash-icon" src="/static/video.png" mode="aspectFit"></image>
+          <text class="flash-text">{{mediaType === 'image' ? '视频' : '图片' }}</text>
+        </view> -->
+      </view>
+  </view>
   <!-- 毛玻璃背景图（权限未授权或摄像头错误时显示） -->
   <view wx:if="{{!hasPermissions || showError}}" class="background-blur">
     <image class="background-image" src="/static/bg.jpg" mode="aspectFill"></image>
@@ -21,17 +42,7 @@
   >
     <!-- 水印叠加层 -->
     <cover-view class="watermark-overlay">
-      <!-- 左上角设置按钮 -->
-      <cover-view class="watermark-top-left">
-        <cover-view class="setting-btn" bindtap="goToSettings">
-          <image class="icon-setting" src="/static/setting.png" mode="aspectFit"></image>
-        </cover-view>
-        <!-- 闪光灯按钮 -->
-        <cover-view class="flash-btn" bindtap="toggleFlash">
-          <image class="flash-icon" src="{{flashMode === 'on' ? '/static/flashlight.png' : flashMode === 'off' ? '/static/flashlight-turned-off.png' : '/static/flashlight-auto.png'}}" mode="aspectFit"></image>
-          <text class="flash-text">灯光</text>
-        </cover-view>
-      </cover-view>
+      
       
       <!-- 左下角信息区域 -->
       <cover-view class="watermark-bottom-left">
@@ -53,35 +64,37 @@
     </cover-view>
   </camera>
   
-  <!-- 底部控制栏 -->
-  <view class="bottom-controls">
+  <!-- 底部控制栏 (20%高度) -->
+  <view class="bottom-controls-new">
     <!-- 水印设置按钮 -->
-    <view class="control-btn" bindtap="openWatermarkSettings">
-      <image class="btn-icon" src="/static/shuiyin.png" mode="aspectFit"></image>
-      <view class="btn-text">水印</view>
+    <view class="control-btn-new" bindtap="openWatermarkSettings">
+      <image class="btn-icon-new" src="/static/shuiyin.png" mode="aspectFit"></image>
+      <view class="btn-text-new">水印设置</view>
     </view>
     
     <!-- 拍照按钮 -->
-    <view class="capture-button-container">
-      <!-- 权限提示tooltip -->
-      <view class="permission-tooltip" wx:if="{{showPermissionTooltip}}">
-        <view class="tooltip-content">
-          请授权摄像头和位置信息，之后使用水印拍照功能
-        </view>
-        <view class="tooltip-arrow"></view>
-      </view>
-      
-      <view class="shutter-btn {{isCapturing ? 'capturing' : ''}}" bindtap="takePhoto" catchtap="takePhoto">
-         <view class="shutter-inner" wx:if="{{hasPermissions}}"></view>
-         <view class="permission-text" wx:else>点击授权</view>
-       </view>
+    <view class="shutter-btn-new {{isCapturing ? 'capturing' : ''}}" bindtap="takePhoto">
+      <view class="shutter-inner-new" wx:if="{{hasPermissions}}"></view>
+      <view class="permission-text-new" wx:else>点击授权</view>
     </view>
     
     <!-- 切换摄像头按钮 -->
-    <view class="control-btn" bindtap="switchCamera">
-      <image class="btn-icon" src="/static/switch_camera.png" mode="aspectFit"></image>
-      <view class="btn-text">切换</view>
+    <view class="control-btn-new" bindtap="switchCamera">
+      <image class="btn-icon-new" src="/static/switch_camera.png" mode="aspectFit"></image>
+      <view class="btn-text-new">切换</view>
     </view>
+  </view>
+  
+  <!-- 权限提示tooltip -->
+  <view class="permission-tooltip" wx:if="{{showPermissionTooltip}}">
+    <view class="tooltip-content">
+      <view class="tooltip-text">点击授权摄像头和位置权限</view>
+      <view class="tooltip-buttons">
+        <button class="tooltip-btn" bindtap="requestPermissions">去授权</button>
+        <button class="tooltip-btn secondary" bindtap="hidePermissionTooltip">取消</button>
+      </view>
+    </view>
+    <view class="tooltip-arrow"></view>
   </view>
   
   <!-- 功能按钮区域 -->
