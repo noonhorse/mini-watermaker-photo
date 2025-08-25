@@ -1,0 +1,80 @@
+/* components/watermark-list/watermark-list.wxss */
+.watermark-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.watermark-panel.active {
+  transform: translateY(0);
+}
+
+.panel-content {
+  background-color: #fff;
+  border-radius: 20rpx 20rpx 0 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.panel-title {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.close-btn {
+  font-size: 40rpx;
+  color: #999;
+  cursor: pointer;
+}
+
+.watermark-scroll {
+  flex: 1;
+  height: 100%;
+}
+
+.watermark-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  padding: 20rpx;
+}
+
+.watermark-item {
+  border: 1rpx solid #eee;
+  border-radius: 10rpx;
+  padding: 10rpx;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.watermark-item.selected {
+  border-color: #007aff;
+}
+
+.item-preview {
+  width: 100%;
+  height: 200rpx;
+  background-color: #f0f0f0;
+  border-radius: 5rpx;
+}
+
+.item-name {
+  font-size: 28rpx;
+  margin-top: 10rpx;
+  color: #333;
+}

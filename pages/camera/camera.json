@@ -6,5 +6,9 @@
   "backgroundColor": "#000000",
   "backgroundTextStyle": "light",
   "enablePullDownRefresh": false,
-  "disableScroll": true
+  "disableScroll": true,
+  "usingComponents": {
+    "watermark-list": "/components/watermark-list/watermark-list",
+    "watermark-display": "/components/watermark-display/watermark-display"
+  }
 }

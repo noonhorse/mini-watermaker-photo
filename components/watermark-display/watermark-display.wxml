@@ -1,0 +1,67 @@
+<!-- 水印显示组件 -->
+<cover-view wx:if="{{visible}}" class="watermark-overlay">
+  <!-- 默认水印样式 -->
+  <cover-view wx:if="{{watermarkId === 'default'}}" class="watermark-bottom-left">
+    <cover-view wx:if="{{title}}" class="description-text">{{title}}</cover-view>
+    <cover-view class="datetime-text">{{currentDate}} {{currentTime}}</cover-view>
+    <cover-view class="location-text">
+      <image class="location-icon" src="/static/dingwei.png" mode="aspectFit"></image>
+      <text class="location-text-content">{{currentLocation}}</text>
+    </cover-view>
+  </cover-view>
+
+  <!-- 工程记录水印 -->
+  <cover-view wx:if="{{watermarkId === 'engineering'}}" class="watermark-engineering">
+    <cover-view class="engineering-header">{{title || ''}}</cover-view>
+    <cover-view class="engineering-time">拍摄时间：{{currentTime}}</cover-view>
+    <cover-view class="engineering-date">拍摄日期：{{currentDate}}</cover-view>
+    <cover-view class="engineering-location">拍摄地点：{{currentLocation}}</cover-view>
+  </cover-view>
+
+  <!-- 时间卡片水印 -->
+  <cover-view wx:if="{{watermarkId === 'time_card'}}" class="watermark-time-card">
+    <cover-view class="time-card-time">{{currentTime}}</cover-view>
+    <cover-view class="time-card-name">姓名</cover-view>
+    <cover-view class="time-card-date">{{currentDate}} 周{{wekday}}</cover-view>
+    <cover-view class="time-card-location">{{currentLocation}}</cover-view>
+  </cover-view>
+
+  <!-- 环境治理水印 -->
+  <cover-view wx:if="{{watermarkId === 'environment'}}" class="watermark-environment">
+    <cover-view class="env-title">{{title || '环境治理'}}</cover-view>
+    <cover-view class="env-datetime">{{currentDate}} {{currentTime}}</cover-view>
+    <cover-view class="env-location">{{currentLocation}}</cover-view>
+    <cover-view class="env-detail">工作内容：备注等</cover-view>
+  </cover-view>
+
+  <!-- 简约时间水印 -->
+  <cover-view wx:if="{{watermarkId === 'simple_time'}}" class="watermark-simple-time">
+    <cover-view class="simple-time">{{currentTime}}</cover-view>
+    <cover-view class="simple-name">姓名 {{currentDate}}</cover-view>
+    <cover-view class="simple-location">{{currentLocation}}</cover-view>
+  </cover-view>
+
+  <!-- 温度显示水印 -->
+  <cover-view wx:if="{{watermarkId === 'temperature'}}" class="watermark-temperature">
+    <cover-view class="temp-time">{{currentTime}}</cover-view>
+    <cover-view class="temp-date">{{currentDate}} 周{{weekday}}</cover-view>
+    <cover-view class="temp-location">{{currentLocation}}</cover-view>
+  </cover-view>
+
+  <!-- 工作记录水印 -->
+  <cover-view wx:if="{{watermarkId === 'work_record'}}" class="watermark-work-record">
+    <cover-view class="work-title">{{title || ''}}</cover-view>
+    <cover-view class="work-time">{{currentTime}}</cover-view>
+    <cover-view class="work-name">姓名</cover-view>
+    <cover-view class="work-location">{{currentLocation}}</cover-view>
+  </cover-view>
+
+  <!-- 蓝色卡片水印 -->
+  <cover-view wx:if="{{watermarkId === 'blue_card'}}" class="watermark-blue-card">
+    <cover-view class="blue-title">{{title || ''}}</cover-view>
+    <cover-view class="blue-time">{{currentTime}}</cover-view>
+    <cover-view class="blue-name">姓名</cover-view>
+    <cover-view class="blue-date">{{currentDate}}</cover-view>
+    <cover-view class="blue-location">{{currentLocation}}</cover-view>
+  </cover-view>
+</cover-view>

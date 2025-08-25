@@ -1,0 +1,17 @@
+<!--components/watermark-list/watermark-list.wxml-->
+<view class="watermark-panel {{show ? 'active' : ''}}">
+  <view class="panel-content">
+    <view class="panel-header">
+      <text class="panel-title">水印列表</text>
+      <view class="close-btn" bindtap="hidePanel">×</view>
+    </view>
+    <scroll-view scroll-y class="watermark-scroll">
+      <view class="watermark-list">
+        <view wx:for="{{watermarkStyles}}" wx:key="id" class="watermark-item {{item.id === selectedId ? 'selected' : ''}}" bindtap="onSelect" data-id="{{item.id}}">
+          <image class="item-preview" src="{{item.preview}}" mode="aspectFill"></image>
+          <text class="item-name">{{item.name}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

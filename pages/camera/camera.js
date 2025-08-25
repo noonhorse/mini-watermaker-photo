@@ -16,6 +16,7 @@ Page({
     isLoading: false, // 是否显示加载
     loadingText: '正在处理...', // 加载文字
     timerCount: 0, // 倒计时
+    currentDate: '', // 当前日期
     currentDateTime: '', // 当前时间
     orientation: 'portrait', // 屏幕方向：portrait/landscape
     settings: {}, // 用户设置
@@ -29,7 +30,9 @@ Page({
     errorTitle: '', // 错误标题
     errorMessage: '', // 错误消息
     hasPermissions: false, // 是否有权限
-    showPermissionTooltip: false // 是否显示权限提示tooltip
+    showPermissionTooltip: false, // 是否显示权限提示tooltip
+    showWatermarkPanel: false, // 是否显示水印面板
+    currentWatermarkId: 'default' // 当前水印ID
   },
 
   onLoad() {
@@ -189,7 +192,8 @@ Page({
     const second = String(now.getSeconds()).padStart(2, '0')
     
     this.setData({
-      currentDateTime: `${year}-${month}-${day} ${hour}:${minute}:${second}`
+      currentDate: `${year}-${month}-${day}`,
+      currentDateTime: `${hour}:${minute}`
     })
   },
 
@@ -349,6 +353,7 @@ Page({
     const watermarkData = {
       logoText: this.data.settings.logoText,
       description: this.data.settings.description,
+      date: this.data.currentDate,
       datetime: this.data.currentDateTime,
       location: this.data.locationInfo.address,
       coordinates: watermarkUtil.formatCoordinates(
@@ -512,6 +517,24 @@ Page({
       icon: 'none',
       duration: 1000
     })
+  },
+
+  // 显示水印面板
+  showWatermarkPanel() {
+    this.setData({ showWatermarkPanel: true });
+  },
+
+  // 隐藏水印面板
+  hideWatermarkPanel() {
+    this.setData({ showWatermarkPanel: false });
+  },
+
+  // 处理水印选择
+  onWatermarkSelect(e) {
+    const selectedId = e.detail.id;
+    this.setData({ currentWatermarkId: selectedId });
+    console.log('选中的水印ID:', selectedId);
+    this.hideWatermarkPanel();
   },
 
   // 切换闪光灯

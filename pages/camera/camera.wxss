@@ -147,6 +147,28 @@
   text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
 }
 
+/* 水印按钮样式 */
+.watermark-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  font-size: 24rpx;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 15rpx;
+  width: 120rpx;
+  height: 120rpx;
+  justify-content: center;
+  pointer-events: auto;
+  margin-left: 20rpx;
+}
+
+.watermark-icon {
+  width: 50rpx;
+  height: 50rpx;
+  margin-bottom: 10rpx;
+}
+
 /* 左下角信息区域 */
 .watermark-bottom-left {
   position: absolute;
@@ -201,6 +223,8 @@
   font-family: monospace;
   text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
 }
+
+/* 水印样式已迁移到 watermark-display 组件 */
 
 /* 倒计时叠加层 */
 .timer-overlay {

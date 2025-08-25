@@ -3,9 +3,10 @@
   <!-- 左上角设置按钮 -->
   <view class="function-area">
       <view class="watermark-top-left">
-        <view class="setting-btn" bindtap="goToSettings">
+        <!-- 设置按钮 -->
+        <!-- <view class="setting-btn" bindtap="goToSettings">
           <image class="icon-setting" src="/static/setting.png" mode="aspectFit"></image>
-        </view>
+        </view> -->
         <!-- 闪光灯按钮 -->
         <view class="flash-btn" bindtap="toggleFlash">
           <image wx:if="{{flashMode === 'on'}}" class="flash-icon" src="/static/flashlight.png" mode="aspectFit"></image>
@@ -28,46 +29,39 @@
   </view>
   
   <!-- 相机预览区域 -->
-  <camera wx:if="{{hasPermissions}}" 
-    class="camera-preview {{orientation}}"
-    device-position="{{cameraPosition}}"
-    flash="{{flashMode}}"
-    zoom="{{zoomLevel}}"
-    binderror="onCameraError"
-    bindstop="onCameraStop"
-    bindready="onCameraReady"
-    bindtouchstart="onTouchStart"
-    bindtouchmove="onTouchMove"
-    bindtouchend="onTouchEnd"
-  >
-    <!-- 水印叠加层 -->
-    <cover-view class="watermark-overlay">
-      
-      
-      <!-- 左下角信息区域 -->
-      <cover-view class="watermark-bottom-left">
-        <cover-view class="description-text">{{settings.description}}</cover-view>
-        <cover-view class="datetime-text">{{currentDateTime}}</cover-view>
-        <cover-view wx:if="{{settings.showLocation && locationInfo.address}}" class="location-text">
-          <image class="location-icon" src="/static/dingwei.png" mode="aspectFit"></image>
-          <text class="location-text-content">{{locationInfo.address}}</text>
-        </cover-view>
-        <cover-view wx:if="{{settings.showCoordinates && locationInfo.latitude}}" class="coordinates-text">
-          {{locationInfo.latitude}}, {{locationInfo.longitude}}
-        </cover-view>
-      </cover-view>
-      
-      <!-- 倒计时显示 -->
-      <cover-view wx:if="{{timerCount > 0}}" class="timer-overlay">
-        <cover-view class="timer-count">{{timerCount}}</cover-view>
-      </cover-view>
+    <camera wx:if="{{hasPermissions}}" 
+      class="camera-preview {{orientation}}"
+      device-position="{{cameraPosition}}"
+      flash="{{flashMode}}"
+      zoom="{{zoomLevel}}"
+      binderror="onCameraError"
+      bindstop="onCameraStop"
+      bindready="onCameraReady"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+    >
+    <!-- 水印显示组件 -->
+    <watermark-display 
+      watermark-id="{{currentWatermarkId}}"
+      visible="{{true}}"
+    ></watermark-display>
+    
+    <!-- 倒计时显示 -->
+    <cover-view wx:if="{{timerCount > 0}}" class="timer-overlay">
+      <cover-view class="timer-count">{{timerCount}}</cover-view>
     </cover-view>
   </camera>
-  
+   <!-- 水印列表面板 -->
+    <watermark-list 
+      show="{{showWatermarkPanel}}" 
+      bind:onclose="hideWatermarkPanel" 
+      bind:onselect="onWatermarkSelect"
+    ></watermark-list>
   <!-- 底部控制栏 (20%高度) -->
   <view class="bottom-controls-new">
     <!-- 水印设置按钮 -->
-    <view class="control-btn-new" bindtap="openWatermarkSettings">
+    <view class="control-btn-new" bindtap="showWatermarkPanel">
       <image class="btn-icon-new" src="/static/shuiyin.png" mode="aspectFit"></image>
       <view class="btn-text-new">水印设置</view>
     </view>
@@ -133,17 +127,6 @@
     <view class="loading-text">{{loadingText}}</view>
   </view>
 </view>
-
-<!-- 错误对话框 -->
-<!-- <view class="error-overlay" wx:if="{{showError}}">
-  <view class="error-content">
-    <view class="error-icon">⚠️</view>
-    <view class="error-title">{{errorTitle}}</view>
-    <view class="error-message">{{errorMessage}}</view>
-    <button class="error-button" bindtap="hideErrorDialog">确定</button>
-  </view>
-</view> -->
-
 <!-- 隐藏的canvas用于水印处理 -->
 <canvas 
   id="watermarkCanvas" 
