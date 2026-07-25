@@ -8,7 +8,7 @@
   "enablePullDownRefresh": false,
   "disableScroll": true,
   "usingComponents": {
-    "watermark-list": "/components/watermark-list/watermark-list",
-    "watermark-display": "/components/watermark-display/watermark-display"
+    "watermark-display": "/components/watermark-display/watermark-display",
+    "address-select": "/components/address-select/address-select"
   }
 }

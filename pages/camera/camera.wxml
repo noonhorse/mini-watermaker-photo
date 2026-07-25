@@ -22,6 +22,10 @@
         </view> -->
       </view>
   </view>
+  <!-- 照片预览界面 -->
+  <view wx:if="{{showPreview}}" class="background-blur preview-picture">
+    <image class="background-image" src="{{previewImagePath}}" mode="aspectFit"></image>
+  </view>
   <!-- 毛玻璃背景图（权限未授权或摄像头错误时显示） -->
   <view wx:if="{{!hasPermissions || showError}}" class="background-blur">
     <image class="background-image" src="/static/bg.jpg" mode="aspectFill"></image>
@@ -29,7 +33,7 @@
   </view>
   
   <!-- 相机预览区域 -->
-    <camera wx:if="{{hasPermissions}}" 
+  <camera wx:if="{{hasPermissions && !showPreview}}" 
       class="camera-preview {{orientation}}"
       device-position="{{cameraPosition}}"
       flash="{{flashMode}}"
@@ -41,27 +45,30 @@
       bindtouchmove="onTouchMove"
       bindtouchend="onTouchEnd"
     >
-    <!-- 水印显示组件 -->
-    <watermark-display 
-      watermark-id="{{currentWatermarkId}}"
-      visible="{{true}}"
-    ></watermark-display>
-    
-    <!-- 倒计时显示 -->
-    <cover-view wx:if="{{timerCount > 0}}" class="timer-overlay">
-      <cover-view class="timer-count">{{timerCount}}</cover-view>
-    </cover-view>
+      <!-- 水印显示组件 -->
+      <watermark-display 
+        watermark-id="{{currentWatermarkId}}"
+        locationInfo="{{locationInfo}}"
+        visible="{{true}}"
+        bindtap="showAddressPanel"
+      ></watermark-display>
+      
+      <!-- 倒计时显示 -->
+      <cover-view wx:if="{{timerCount > 0}}" class="timer-overlay">
+        <cover-view class="timer-count">{{timerCount}}</cover-view>
+      </cover-view>
   </camera>
-   <!-- 水印列表面板 -->
+  
+   <!-- 水印列表面板
     <watermark-list 
       show="{{showWatermarkPanel}}" 
       bind:onclose="hideWatermarkPanel" 
       bind:onselect="onWatermarkSelect"
-    ></watermark-list>
+    ></watermark-list>  -->
   <!-- 底部控制栏 (20%高度) -->
-  <view class="bottom-controls-new">
+  <view  wx:if="{{!showPreview}}"  class="bottom-controls-new">
     <!-- 水印设置按钮 -->
-    <view class="control-btn-new" bindtap="showWatermarkPanel">
+    <view class="control-btn-new" bindtap="showAddressPanel">
       <image class="btn-icon-new" src="/static/shuiyin.png" mode="aspectFit"></image>
       <view class="btn-text-new">水印设置</view>
     </view>
@@ -78,6 +85,22 @@
       <view class="btn-text-new">切换</view>
     </view>
   </view>
+  <!-- 预览操作按钮 -->
+    <view  wx:if="{{showPreview}}" class="bottom-controls-new">
+      <view class="control-btn-new" bindtap="onPreviewCancel">
+        <image class="btn-icon-new" src="/static/back.png" mode="aspectFit"></image>
+        <view class="btn-text-new">重新拍摄</view>
+      </view>
+      <view class="control-btn-new" bindtap="shareFileToMessage">
+        <image class="btn-icon-new" src="/static/i-share.png" mode="aspectFit"></image>
+        <view class="btn-text-new">分享到微信</view>
+      </view>
+      <view class="control-btn-new" bindtap="onPreviewConfirm">
+        <image class="btn-icon-new" src="/static/download.png" mode="aspectFit"></image>
+        <view class="btn-text-new">保存图片</view>
+      </view>
+    </view>
+
   
   <!-- 权限提示tooltip -->
   <view class="permission-tooltip" wx:if="{{showPermissionTooltip}}">
@@ -93,7 +116,6 @@
   
   <!-- 功能按钮区域 -->
   <view class="function-controls">
-    
     
     <!-- 定时器按钮 -->
     <!-- <view class="function-btn" bindtap="toggleTimer">
@@ -133,3 +155,12 @@
   type="2d" 
   style="position: fixed; top: -9999px; left: -9999px; width: 1px; height: 1px;"
 ></canvas>
+
+<!-- 地址选择浮层 -->
+<address-select 
+  show="{{showAddressSelect}}"
+  latitude="{{locationInfo.latitude}}"
+  longitude="{{locationInfo.longitude}}"
+  bind:close="onAddressSelectClose"
+  bind:confirm="onAddressSelectConfirm"
+></address-select>

@@ -1,7 +1,6 @@
 {
   "pages": [
-    "pages/camera/camera",
-    "pages/settings/settings"
+    "pages/camera/camera"
   ],
   "window": {
     "backgroundTextStyle": "light",

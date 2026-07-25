@@ -126,7 +126,7 @@ function addWatermarkElements(ctx, width, height, watermarkData) {
     const logoHeight = 40
     
     // 绘制背景
-    drawRoundedRect(ctx, padding, padding, logoWidth, logoHeight, cornerRadius, 'rgba(0,0,0,0.6)')
+    drawRoundedRect(ctx, padding, padding, logoWidth, logoHeight, cornerRadius)
     
     // 绘制文字
     ctx.fillStyle = '#ffffff'
@@ -217,9 +217,9 @@ function drawRoundedRect(ctx, x, y, width, height, radius, fillStyle) {
 function generateHashCode(data) {
   // 创建包含时间戳的唯一数据
   const hashData = {
-    ...data,
-    timestamp: Date.now(),
-    random: Math.random().toString(36).substring(2)
+    date: data.date,
+    datetime: data.datetime,
+    wxAppId: wx.getAccountInfoSync().miniProgram.appId
   }
   
   const str = JSON.stringify(hashData)

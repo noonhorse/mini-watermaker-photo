@@ -3,10 +3,11 @@
   <!-- 默认水印样式 -->
   <cover-view wx:if="{{watermarkId === 'default'}}" class="watermark-bottom-left">
     <cover-view wx:if="{{title}}" class="description-text">{{title}}</cover-view>
-    <cover-view class="datetime-text">{{currentDate}} {{currentTime}}</cover-view>
+    <cover-view class="date-text">{{currentTime}}</cover-view>
+    <cover-view class="datetime-text">{{currentDate}} </cover-view>
     <cover-view class="location-text">
       <image class="location-icon" src="/static/dingwei.png" mode="aspectFit"></image>
-      <text class="location-text-content">{{currentLocation}}</text>
+      <text class="location-text-content">位置{{currentLocation}}</text>
     </cover-view>
   </cover-view>
 
@@ -64,4 +65,10 @@
     <cover-view class="blue-date">{{currentDate}}</cover-view>
     <cover-view class="blue-location">{{currentLocation}}</cover-view>
   </cover-view>
+
+  <!-- 灰色水印 -->
+   <cover-view class="watermark-mini-name">
+      <cover-view class="watermark-mini-text">{{miniName}} 经度: {{latitude ? latitude.toFixed(6) : '无'}}, 纬度{{longitude ? longitude.toFixed(6) : '无'}}</cover-view>
+      <!-- <cover-view class="watermark-mini-text"> {{hash}}</cover-view> -->
+   </cover-view>
 </cover-view>

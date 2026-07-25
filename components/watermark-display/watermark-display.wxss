@@ -10,7 +10,8 @@
 }
 
 /* 默认水印样式 */
-.watermark-bottom-left {
+.watermark-bottom-left,
+.watermark-mini-name {
   position: absolute;
   bottom: 150rpx;
   left: 30rpx;
@@ -18,10 +19,20 @@
   font-size: 28rpx;
   text-shadow: 2rpx 2rpx 4rpx rgba(0, 0, 0, 0.8);
 }
-
+.watermark-mini-name {
+  bottom: 70rpx;
+}
+.watermark-mini-text {
+  font-size: 28rpx;
+  margin-bottom: 10rpx;
+}
 .description-text {
   font-size: 32rpx;
   font-weight: bold;
+  margin-bottom: 10rpx;
+}
+.date-text {
+  font-size: 40rpx;
   margin-bottom: 10rpx;
 }
 

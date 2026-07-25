@@ -8,6 +8,10 @@ Component({
       type: String,
       value: 'default'
     },
+    locationInfo: {
+      type: Object,
+      value: {}
+    },
     // 是否显示水印
     visible: {
       type: Boolean,
@@ -19,12 +23,16 @@ Component({
    * 组件的初始数据
    */
   data: {
+    miniName: '水印相片',
+    hash: '',
     title: undefined,
     // 当前时间
     weekday: '',
     currentTime: '',
     currentDate: '',
-    currentLocation: '深圳市·莲花山公园'
+    latitude: 39.903732,
+    longitude: 116.397772,
+    address: '北京市.天安门广场'
   },
 
   /**
@@ -57,6 +65,23 @@ Component({
     attached() {
       // 组件实例进入页面节点树时执行
       this.updateTime();
+      // this.setData({
+      //   latitude: this.locationInfo.latitude,
+      //   longitude: this.locationInfo.longitude,
+      //   address: this.locationInfo.address
+      // });
+      if(this.longitude || this.latitude) {
+        this.setData({
+          longitude: this.longitude, // 经度
+          latitude: this.latitude, // 纬度
+          address: this.address
+        })
+      } else if (!this.address){
+        this.setData({
+          address: '暂未授权获取地址'
+        })
+      }
+      
       // 每分钟更新一次时间
       this.timeInterval = setInterval(() => {
         this.updateTime();

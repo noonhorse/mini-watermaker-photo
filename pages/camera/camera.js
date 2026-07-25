@@ -21,9 +21,9 @@ Page({
     orientation: 'portrait', // 屏幕方向：portrait/landscape
     settings: {}, // 用户设置
     locationInfo: { // 位置信息
-      latitude: null,
-      longitude: null,
-      address: ''
+      latitude: 39.903732,
+      longitude: 116.397772,
+      address: '北京市.天安门广场'
     },
     lastPhotoPath: null, // 最后拍摄的照片路径
     showError: false, // 是否显示错误对话框
@@ -32,7 +32,10 @@ Page({
     hasPermissions: false, // 是否有权限
     showPermissionTooltip: false, // 是否显示权限提示tooltip
     showWatermarkPanel: false, // 是否显示水印面板
-    currentWatermarkId: 'default' // 当前水印ID
+    currentWatermarkId: 'default', // 当前水印ID
+    showAddressSelect: false, // 是否显示地址选择浮层
+    showPreview: false, // 是否显示照片预览
+    previewImagePath: null // 预览图片路径
   },
 
   onLoad() {
@@ -129,7 +132,7 @@ Page({
   // 预加载资源
   preloadResources() {
     // 预创建canvas上下文以提高水印生成速度
-    setTimeout(() => {
+    // setTimeout(() => {
       const query = wx.createSelectorQuery()
       query.select('#watermarkCanvas').node().exec((res) => {
         if (res[0] && res[0].node) {
@@ -140,7 +143,7 @@ Page({
           ctx.fillRect(0, 0, 1, 1)
         }
       })
-    }, 100)
+    // }, 100)
   },
 
   // 性能监控
@@ -202,9 +205,7 @@ Page({
     locationUtil.getCurrentLocation({
       success: (locationData) => {
         this.setData({
-          'locationInfo.latitude': locationData.latitude.toFixed(6),
-          'locationInfo.longitude': locationData.longitude.toFixed(6),
-          'locationInfo.address': locationData.address || ''
+          locationInfo: locationData
         })
       },
       fail: (err) => {
@@ -351,8 +352,8 @@ Page({
     
     // 准备水印数据
     const watermarkData = {
-      logoText: this.data.settings.logoText,
-      description: this.data.settings.description,
+      logoText: this.data.settings.logoText || '',
+      description: this.data.settings.description || '',
       date: this.data.currentDate,
       datetime: this.data.currentDateTime,
       location: this.data.locationInfo.address,
@@ -365,15 +366,19 @@ Page({
     }
     
     // 延迟一下确保canvas已经渲染
-    setTimeout(() => {
+    // setTimeout(() => {
       // 生成带水印的图片
       watermarkUtil.generateWatermark({
         imagePath: imagePath,
         watermarkData: watermarkData,
         success: (watermarkedPath) => {
-        this.setData({ lastPhotoPath: watermarkedPath })
-        this.savePhoto(watermarkedPath)
-      },
+          this.setData({ 
+            lastPhotoPath: watermarkedPath,
+            previewImagePath: watermarkedPath,
+            showPreview: true,
+            isLoading: false
+          })
+        },
         fail: (err) => {
           console.error('添加水印失败', err)
           
@@ -389,9 +394,8 @@ Page({
           this.savePhoto(imagePath)
         }
       })
-    }, 100)
+    // }, 100)
   },
-
   // 保存照片
   savePhoto(imagePath) {
     this.setData({ loadingText: '正在保存...' })
@@ -518,10 +522,13 @@ Page({
       duration: 1000
     })
   },
-
+  showAddressPanel() {
+    this.setData({ showAddressSelect: true });
+  },
   // 显示水印面板
   showWatermarkPanel() {
-    this.setData({ showWatermarkPanel: true });
+    // 修改为显示地址选择浮层
+    this.setData({ showAddressSelect: true });
   },
 
   // 隐藏水印面板
@@ -598,39 +605,6 @@ Page({
         zoomLevel: Math.round((this.data.zoomLevel - 0.5) * 10) / 10
       })
     }
-  },
-
-  // 打开水印设置
-  openWatermarkSettings() {
-    const watermarkFormats = ['标准格式', '简洁格式', '详细格式']
-    const currentFormat = this.data.settings.watermarkFormat || '标准格式'
-    const currentIndex = watermarkFormats.indexOf(currentFormat)
-    
-    wx.showActionSheet({
-      itemList: watermarkFormats,
-      success: (res) => {
-        const selectedFormat = watermarkFormats[res.tapIndex]
-        
-        // 更新设置
-        const newSettings = {
-          ...this.data.settings,
-          watermarkFormat: selectedFormat
-        }
-        
-        this.setData({
-          settings: newSettings
-        })
-        
-        // 保存到全局设置
-        app.updateSettings(newSettings)
-        
-        wx.showToast({
-          title: `已切换到${selectedFormat}`,
-          icon: 'success',
-          duration: 1500
-        })
-      }
-    })
   },
 
   // 前往设置页面
@@ -800,5 +774,73 @@ Page({
       if (this.data.showPermissionTooltip) {
         this.hidePermissionTooltip()
       }
+    },
+
+    // 地址选择浮层关闭事件
+    onAddressSelectClose() {
+      this.setData({ showAddressSelect: false });
+    },
+
+    // 地址选择确认事件
+    onAddressSelectConfirm(e) {
+      const selectedAddress = e.detail.address;
+      this.setData({
+        'locationInfo.address': selectedAddress,
+        showAddressSelect: false
+      });
+      
+      wx.showToast({
+        title: '地址已更新',
+        icon: 'success',
+        duration: 2000
+      });
+    },
+
+    // 取消预览，重新拍摄
+    onPreviewCancel() {
+      this.setData({
+        showPreview: false,
+        previewImagePath: null,
+        isCapturing: false
+      })
+    },
+
+    // 确认保存照片
+  onPreviewConfirm() {
+    if (this.data.previewImagePath) {
+      this.setData({
+        showPreview: false
+      })
+      this.savePhoto(this.data.previewImagePath)
     }
+  },
+
+  // 分享图片到微信聊天框
+  shareFileToMessage() {
+    if (!this.data.previewImagePath) {
+      wx.showToast({
+        title: '没有可分享的图片',
+        icon: 'none'
+      })
+      return
+    }
+
+    wx.shareFileMessage({
+      filePath: this.data.previewImagePath,
+      fileName: `水印相机_${new Date().getTime()}.jpg`,
+      success: () => {
+        wx.showToast({
+          title: '分享成功',
+          icon: 'success'
+        })
+      },
+      fail: (err) => {
+        console.error('分享失败', err)
+        wx.showToast({
+          title: '分享失败',
+          icon: 'none'
+        })
+      }
+    })
+  }
 })
