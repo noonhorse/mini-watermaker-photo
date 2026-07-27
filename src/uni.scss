@@ -1,0 +1,37 @@
+/* uni.scss - 全局 SCSS 变量 */
+
+/* 主题色 */
+$uni-color-primary: #007aff;
+$uni-color-success: #4cd964;
+$uni-color-warning: #f0ad4e;
+$uni-color-error: #dd524d;
+
+/* 文字颜色 */
+$uni-text-color: #333333;
+$uni-text-color-inverse: #ffffff;
+$uni-text-color-grey: #999999;
+$uni-text-color-placeholder: #808080;
+$uni-text-color-disable: #c0c0c0;
+
+/* 背景颜色 */
+$uni-bg-color: #ffffff;
+$uni-bg-color-grey: #f5f5f5;
+$uni-bg-color-hover: #f1f1f1;
+$uni-bg-color-mask: rgba(0, 0, 0, 0.4);
+
+/* 边框颜色 */
+$uni-border-color: #e5e5e5;
+$uni-border-color-light: #eeeeee;
+
+/* 字体大小 */
+$uni-font-size-base: 28rpx;
+$uni-font-size-sm: 24rpx;
+$uni-font-size-lg: 32rpx;
+
+/* 圆角 */
+$uni-border-radius-base: 8rpx;
+$uni-border-radius-lg: 16rpx;
+
+/* 阴影 */
+$uni-shadow-base: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
+$uni-shadow-lg: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);

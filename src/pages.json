@@ -1,0 +1,52 @@
+{
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"watermark-(.*)": "@/components/watermark-$1/watermark-$1.vue",
+			"address-select": "@/components/address-select/address-select.vue"
+		}
+	},
+	"pages": [
+		{
+			"path": "pages/camera/camera",
+			"style": {
+				"navigationBarTitleText": "水印相机",
+				"navigationStyle": "custom",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#000000",
+				"backgroundTextStyle": "light",
+				"enablePullDownRefresh": false,
+				"disableScroll": true
+			}
+		},
+		{
+			"path": "pages/settings/settings",
+			"style": {
+				"navigationBarTitleText": "设置",
+				"navigationBarBackgroundColor": "#007aff",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#f5f5f5",
+				"backgroundTextStyle": "light",
+				"enablePullDownRefresh": false
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "水印打卡相机",
+		"navigationBarBackgroundColor": "#000000",
+		"backgroundColor": "#000000",
+		"backgroundTextStyle": "light"
+	},
+	"permission": {
+		"scope.userLocation": {
+			"desc": "你的位置信息将用于显示地址水印"
+		},
+		"scope.camera": {
+			"desc": "需要使用相机进行拍照"
+		}
+	},
+	"requiredBackgroundModes": ["location"],
+	"lazyCodeLoading": "requiredComponents"
+}
